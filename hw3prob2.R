@@ -47,7 +47,7 @@ models <- list(
   
 )
 
-preds <- lappy(models, function(x){
+preds.prob2 <- lappy(models, function(x){
   do.call("predict", list(x, data=spam.test))
 })
 
