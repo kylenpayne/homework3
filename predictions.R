@@ -1,6 +1,6 @@
 # predictions.R
 
-if(!exists(zero.one, mode="function") & !exists(deviance, mode="function")) source("classif.R")
+#if(!exists(zero.one, mode="function") & !exists(deviance, mode="function")) source("classif.R")
 
 predict.accuracy <- function(list, xtable=TRUE){
   pred.zero.one <- lapply(list, zero.one)

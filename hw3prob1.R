@@ -3,9 +3,9 @@
 # 10/25/2014
 
 
-if(!exists(zero.one, mode="function") & !exists(deviance, mode="function")) source("classif.R")
+#if(!exists(zero.one, mode="function") & !exists(deviance, mode="function")) source("classif.R")
 
-if(!exist(predict.accuracy, mode="function")) source("predictions.R")
+#if(!exists(predict.accuracy, mode="function")) source("predictions.R")
 # load in the local dependencies 
 library(glmnet)
 library(xtable)
@@ -43,7 +43,7 @@ lasso.table<- xtable(mat.coef)
 pred.full <- predict.glm(full, newdata=spam.test, type="response")
 pred.forward.aic <- predict.glm(forward.aic, newdata=spam.test, type="response")
 pred.forward.bic <- predict.glm(forward.bic, newdata=spam.test, type="response")
-pred.lasso <- predict.glmnet(lasso.logistic, newdata=spam.test, type="response")
+pred.lasso <- predict(lasso.logistic, newx=features.test, type="response")
 
 # get prediction accuracy
 predictions <- list(pred.full, pred.forward.aic, pred.forward.bic, pred.lasso)

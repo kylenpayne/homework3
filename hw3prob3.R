@@ -25,11 +25,11 @@ svm.gaussian.selected = svm(selected.form, data=spam.train, kernel="radial basis
 lapply(models, function(x){ xtable(summary(x))})
 
 #predictions
-preds.prob2 <- lappy(models, function(x){
+preds.prob.3 <- lappy(models, function(x){
   do.call("predict", list(x, data=spam.test))
 })
 
 # prediction accuracy
-table <- lappy(preds.prob2, predict.accuracy)
+table.prob.3 <- lappy(preds.prob.3, predict.accuracy)
 
 

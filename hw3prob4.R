@@ -35,13 +35,13 @@ a=min(alp[alp !=0])
 nodenum[alp == a]
 
 
-models<-list(tree.snip
+models<-list(tree.spam, tree.snip)
 
 # get the predictions
-preds.prob2 <- lappy(models, function(x){
+preds.prob.4 <- lappy(models, function(x){
   do.call("predict", list(x, data=spam.test))
 })
 
 # prediction accuracy
-table.prob5 <- lappy(pred, predict.accuracy)
+table.prob.4 <- lappy(pred, predict.accuracy)
 

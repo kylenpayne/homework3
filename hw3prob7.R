@@ -10,11 +10,11 @@ xtable(as.matrix(summary(xtable(nnet.spam))))
 
 models <- list(nnet.spam)
 
-preds.prob7 <- lappy(models, function(x){
+preds.prob.7 <- lappy(models, function(x){
   do.call("predict", list(x, data=spam.test))
 })
 
 # prediction accuracy
-table <- lappy(pred, predict.accuracy)
+table.pred.prob.7 <- lappy(preds.prob.7, predict.accuracy)
 
 

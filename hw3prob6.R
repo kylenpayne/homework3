@@ -17,3 +17,11 @@ for(i in 1:4){
   lines(x, px, col=8);
   title(paste("# of Iterations = ", size[i]))
 }
+
+models <- list(gbm.spam)
+
+preds.prob.6 <- lappy(models, function(x){
+  do.call("predict", list(x, data=spam.test))
+})
+
+pred.accuracy.6<- lappy(preds.prob.6, predict.accuracy)

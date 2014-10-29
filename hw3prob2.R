@@ -3,8 +3,8 @@
 # 10/25/2014
 
 
-if(!exists(zero.one, mode="function") & !exists(deviance, mode="function")) source("classif.R")
-if(!exist(predict.accuracy, mode="function")) source("predictions.R")
+#if(!exists(zero.one, mode="function") & !exists(deviance, mode="function")) source("classif.R")
+#if(!exist(predict.accuracy, mode="function")) source("predictions.R")
 # load in the dependencies 
 
 library(xtable)
@@ -16,8 +16,8 @@ library(klaR)
 
 lda.spam <- lda(Y ~ ., data=spam.train)
 rda.spam <- rda(Y ~ ., data=spam.train)
-naive.spam.para <- NaiveBayes(Y ~ ., data=spam.train)
-naive.spam.kernel <- NaiveBayes(Y ~ ., data=spam.train, usekernel=T)
+naive.spam.para <- NaiveBayes(factor(Y) ~ ., data=spam.train)
+naive.spam.kernel <- NaiveBayes(factor(Y) ~ ., data=spam.train, usekernel=T)
 # take the union of the variables selected by the various methods in hw3prob1.R
 # this idea is based on extracting the terms from the glm via an attr call.
 
@@ -32,18 +32,21 @@ vars.forward.bic <- attr(forward.bic$terms, "terms.labels")
 vars.lasso <- names(mat.coef)
 
 selected.vars <- union(union(vars.forward.aic, vars.forward.bic), vars.lasso)
+selected.vars <- as.vector(selected.vars)
+selected <- paste(selected.vars, collapse="+")
+form.select <- as.formula(paste("factor(Y) ~ ", selected))
 
 models <- list(
-  lda.spam = lda(Y ~ ., data=spam.train)
-  rda.spam = rda(Y ~ ., data=spam.train)
-  naive.spam.para = NaiveBayes(Y ~ ., data=spam.train)
-  naive.spam.kernel = NaiveBayes(Y ~ ., data=spam.train, usekernel=T)
+  lda.spam = lda(Y ~ ., data=spam.train),
+  rda.spam = rda(Y ~ ., data=spam.train),
+  naive.spam.para = NaiveBayes(Y ~ ., data=spam.train),
+  naive.spam.kernel = NaiveBayes(Y ~ ., data=spam.train, usekernel=T),
   
   # everything again with selected variables
-  lda.spam.selected.vars = lda(Y ~ selected.vars, data=spam.train)
-  rda.spam.selected.vars = rda(Y ~ selected.vars, data=spam.train)
-  naive.spam.para.selected.vars = NaiveBayes(Y ~ selected.vars, data=spam.train)
-  naive.spam.kernel.selected.vars = NaiveBayes(Y ~ selected.vars, data=spam.train, usekernel=T) 
+  lda.spam.selected.vars = lda(form.select, data=spam.train),
+  rda.spam.selected.vars = rda(form.select, data=spam.train),
+  naive.spam.para.selected.vars = NaiveBayes(form.select, data=spam.train),
+  naive.spam.kernel.selected.vars = NaiveBayes(form.select, data=spam.train, usekernel=T) 
   
 )
 
