@@ -39,8 +39,8 @@ form.select <- as.formula(paste("factor(Y) ~ ", selected))
 models <- list(
   lda.spam = lda(Y ~ ., data=spam.train),
   rda.spam = rda(Y ~ ., data=spam.train),
-  naive.spam.para = NaiveBayes(Y ~ ., data=spam.train),
-  naive.spam.kernel = NaiveBayes(Y ~ ., data=spam.train, usekernel=T),
+  naive.spam.para = NaiveBayes(factor(Y) ~ ., data=spam.train),
+  naive.spam.kernel = NaiveBayes(factor(Y) ~ ., data=spam.train, usekernel=T),
   
   # everything again with selected variables
   lda.spam.selected.vars = lda(form.select, data=spam.train),
@@ -50,11 +50,18 @@ models <- list(
   
 )
 
-preds.prob2 <- lappy(models, function(x){
-  do.call("predict", list(x, data=spam.test))
-})
 
-# prediction accuracy
-table <- lappy(pred, predict.accuracy)
+
+preds.prob.2 <- list(
+  predict(lda.spam)$posterior[,2],
+  predict(rda.spam)$posterior[,2],
+  predict(naive.spam.para)$posterior[,2],
+  predict(naive.spam.kernel)$posterior[,2],
+  predict(lda.spam.selected.vars)$posterior[,2],
+  predict(rda.spam.selected.vars)$posterior[,2],
+  predict(naive.spam.para.selected.vars)$posterior[,2],
+  predict(naive.spam.kernel.selected.vars)$posterior[,2]
+  )
+table.prob.2 <- lapply(preds.prob.post, predict.accuracy)
 
 

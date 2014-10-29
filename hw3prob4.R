@@ -2,7 +2,7 @@
 
 library(tree)
 
-form.full <- Y ~ .
+form.full <- as.formula(Y ~ .)
 
 
 tree.spam <- tree(form.full, data=spam.test, 
@@ -21,6 +21,8 @@ prune.tree.spam$k
 tree.snip = snip.tree(tree.spam, 5)
 summary(tree.snip)$size
 dev=tree.snip$frame$dev
+
+nodenum = as.numeric(row.names(tree.spam$frame)); N=length(nodenum);
 alp=rep(0,N) 
 for (i in 1:N) {
     if (sum(nodenum==2*nodenum[i])>0){
@@ -29,19 +31,19 @@ for (i in 1:N) {
       alp[i]=dev[i]-dev[nodenum==tL]-dev[nodenum==tR]
   }}
 sort(alp)
-a=min(alp[alp !=0])
+a=min(alp[alp !=0], na.rm=T)
 nodenum[alp == a]
-a=min(alp[alp !=0])
+a=min(alp[alp !=0], na.rm=T)
 nodenum[alp == a]
 
 
-models<-list(tree.spam, tree.snip)
+models<-list(tree.snip)
 
 # get the predictions
-preds.prob.4 <- lappy(models, function(x){
+preds.prob.4 <- lapply(models, function(x){
   do.call("predict", list(x, data=spam.test))
 })
 
 # prediction accuracy
-table.prob.4 <- lappy(pred, predict.accuracy)
+table.prob.4 <- lapply(preds.prob.4, predict.accuracy)
 

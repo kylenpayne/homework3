@@ -32,6 +32,7 @@ plot(lasso.logistic, xvar="dev", label=T) # plot of the deviance statistic
 lasso.logistic.cv <- cv.glmnet(features.train, response.train, 
                                family = "binomial", type.measure = "class", alpha=1)
 
+s.min <- lasso.logistic.cv$lambda.min
 plot(lasso.logistic.cv)
 
 # return coef
@@ -43,13 +44,14 @@ lasso.table<- xtable(mat.coef)
 pred.full <- predict.glm(full, newdata=spam.test, type="response")
 pred.forward.aic <- predict.glm(forward.aic, newdata=spam.test, type="response")
 pred.forward.bic <- predict.glm(forward.bic, newdata=spam.test, type="response")
-pred.lasso <- predict(lasso.logistic, newx=features.test, type="response")
+pred.lasso <- predict(lasso.logistic, newx=features.test, type="response", s=s.min)
 
 # get prediction accuracy
 predictions <- list(pred.full, pred.forward.aic, pred.forward.bic, pred.lasso)
 
-table <- predict.accuracy(predictions)
+table.prob1 <- predict.accuracy(predictions)
 
 
 
-
+zero.one(pred.full)
+deviance(pred.full)
